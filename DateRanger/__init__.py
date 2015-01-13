@@ -19,6 +19,8 @@ class DateRange(object):
     def days(self):
         """
         Calcualte the difference in days.
+
+        This method does not include end_date.
         """
         return int(self.get_timedelta().days)
 
