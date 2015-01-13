@@ -7,6 +7,65 @@ from datetime import datetime
 from datetime import timedelta
 
 
+class DateRange(object):
+
+    def __init__(self, start_date, end_date):
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def get_timedelta(self):
+        return self.end_date - self.start_date
+
+    def days(self):
+        """
+        Calcualte the difference in days.
+        """
+        return int(self.get_timedelta().days)
+
+    def each_day(self):
+        """
+        Yield each day between start_date and end_date.
+        """
+        for n in xrange(self.days()):
+            yield self.start_date + timedelta(n)
+
+    def get_weekdelta(self):
+        monday1 = (self.start_date - timedelta(days=self.start_date.weekday()))
+        monday2 = (self.end_date - timedelta(days=self.end_date.weekday()))
+        return (monday2 - monday1).days / 7
+
+    def weeks(self):
+        return self.get_weekdelta()
+
+    def each_week(self):
+        monday = (self.start_date - timedelta(days=self.start_date.weekday()))
+        for n in self.weeks():
+            start = monday
+            end = start + timedelta(days=7)
+            yield (start, end)
+            start = monday + timedelta(weeks=n)
+
+    def get_monthdelta(self):
+        yeardelta = int(self.end_date.year) - int(self.start_date.year)
+        if yeardelta == 0:
+            return int(self.end_date.month) - int(self.start_date.month)
+
+        monthdelta = (12 - int(self.start_date.month) + 1) + \
+            ((yeardelta - 1) * 12) + int(self.end_date.month)
+        return monthdelta
+
+    def months(self):
+        return self.get_monthdelta()
+
+    def each_month(self):
+        start = date(self.start_date.year, self.start_date.month, 1)
+        for n in self.months():
+            days = monthrange(start.year, start.month)[1]
+            end = date(self.start_date.year, self.start_date.month, days)
+            yield (start, end)
+            start = end + timedelta(days=1)
+
+
 class DateRanger(object):
 
     """
@@ -32,18 +91,18 @@ class DateRanger(object):
     >>> ranger.time_range_prev_year()
     """
 
-    def __init__(self, base_day=date.today(), time_min=time.min, time_max=time.max):
-        self.base_day = base_day
-        self.time_min = time_min
-        self.time_max = time_max
+    def __init__(self, base_day=None, time_min=None, time_max=None):
+        self.base_day = base_day or date.today()
+        self.time_min = time_min or time.min
+        self.time_max = time_max or time.max
 
-    def get_timerange(self, s, e):
+    def get_timerange(self, start, end):
         """
         Get the time range between 's' and 'e'.
         """
-        f = datetime.combine(s, self.time_min)
-        t = datetime.combine(e, self.time_max)
-        return (f, t)
+        s = datetime.combine(start, self.time_min)
+        e = datetime.combine(end, self.time_max)
+        return (s, t)
 
     def get_base_day_range(self):
         return self.get_timerange(self.base_day, self.base_day)
