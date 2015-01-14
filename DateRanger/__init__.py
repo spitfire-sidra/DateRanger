@@ -9,11 +9,23 @@ from datetime import timedelta
 
 class DateRange(object):
 
+    """
+    An object for operations(get difference/yield date range) of date range.
+    """
+
     def __init__(self, start_date, end_date):
+        """
+        Argus:
+            start_date - the start date
+            end_date - the end date
+        """
         self.start_date = start_date
         self.end_date = end_date
 
     def get_timedelta(self):
+        """
+        Get timedelta of `self.end_date - self.start_date`
+        """
         return self.end_date - self.start_date
 
     def days(self):
@@ -32,14 +44,26 @@ class DateRange(object):
             yield self.start_date + timedelta(n)
 
     def get_weekdelta(self):
+        """
+        Simplify this question by counting weeks between monday1 and monday2.
+
+        monday1 - monday of the week of self.start_date
+        monday2 - monday of the week of self.end_date
+        """
         monday1 = (self.start_date - timedelta(days=self.start_date.weekday()))
         monday2 = (self.end_date - timedelta(days=self.end_date.weekday()))
         return (monday2 - monday1).days / 7
 
     def weeks(self):
+        """
+        Return date difference in months.
+        """
         return self.get_weekdelta()
 
     def each_week(self):
+        """
+        Yield each week between self.start_date and self.end_date
+        """
         monday = (self.start_date - timedelta(days=self.start_date.weekday()))
         for n in self.weeks():
             start = monday
@@ -48,6 +72,9 @@ class DateRange(object):
             start = monday + timedelta(weeks=n)
 
     def get_monthdelta(self):
+        """
+        Get month delta.
+        """
         yeardelta = int(self.end_date.year) - int(self.start_date.year)
         if yeardelta == 0:
             return int(self.end_date.month) - int(self.start_date.month)
@@ -57,9 +84,15 @@ class DateRange(object):
         return monthdelta
 
     def months(self):
+        """
+        Calcualte the difference in months.
+        """
         return self.get_monthdelta()
 
     def each_month(self):
+        """
+        Yield each month between self.start_date and self.end_date
+        """
         start = date(self.start_date.year, self.start_date.month, 1)
         for n in self.months():
             days = monthrange(start.year, start.month)[1]
