@@ -7,6 +7,28 @@ from datetime import datetime
 from datetime import timedelta
 
 
+def month_to_quarter(month):
+    if month in (1, 2, 3):
+        return 1
+    elif month in (4, 5, 6):
+        return 2
+    elif month in (7, 8, 9):
+        return 3
+    else:
+        return 4
+
+
+def quarter_to_month(quarter):
+    if quarter == 1:
+        return (1, 3)
+    elif quarter == 2:
+        return (4, 6)
+    elif quarter == 3:
+        return (7, 9)
+    else:
+        return (10, 12)
+
+
 class DateRange(object):
 
     """
@@ -64,18 +86,17 @@ class DateRange(object):
         """
         Yield each week between self.start_date and self.end_date
         """
-        monday = (self.start_date - timedelta(days=self.start_date.weekday()))
-        for n in self.weeks():
-            start = monday
+        start = (self.start_date - timedelta(days=self.start_date.weekday()))
+        for n in xrange(self.weeks() + 1):
             end = start + timedelta(days=7)
             yield (start, end)
-            start = monday + timedelta(weeks=n)
+            start = end + timedelta(days=1)
 
     def get_monthdelta(self):
         """
         Get month delta.
         """
-        yeardelta = int(self.end_date.year) - int(self.start_date.year)
+        yeardelta = self.get_yeardelta()
         if yeardelta == 0:
             return int(self.end_date.month) - int(self.start_date.month)
 
@@ -94,36 +115,94 @@ class DateRange(object):
         Yield each month between self.start_date and self.end_date
         """
         start = date(self.start_date.year, self.start_date.month, 1)
-        for n in self.months():
-            days = monthrange(start.year, start.month)[1]
-            end = date(self.start_date.year, self.start_date.month, days)
+        if self.months() == 0:
+            days = calendar.monthrange(start.year, start.month)[1]
+            end = date(start.year, start.month, days)
             yield (start, end)
-            start = end + timedelta(days=1)
+        else:
+            for n in xrange(self.months()):
+                days = calendar.monthrange(start.year, start.month)[1]
+                end = date(start.year, start.month, days)
+                yield (start, end)
+                start = end + timedelta(days=1)
+
+    def get_quarterdelta(self):
+        """
+        Calcualte date difference in quraters.
+        """
+        start_quarter = month_to_quarter(self.start_date.month)
+        end_quarter = month_to_quarter(self.end_date.month)
+        yeardelta = self.get_yeardelta()
+        if yeardelta == 0:
+            return end_quarter - start_quarter
+
+        quarterdelta = (4 - start_quarter) + \
+            ((yeardelta - 1) * 4) + end_quarter
+        return quarterdelta
+
+    def quarters(self):
+        """
+        Return date difference in quraters.
+        """
+        return self.get_quarterdelta()
+
+    def each_quarter(self):
+        """
+        Yield each quarter.
+        """
+        quarter = month_to_quarter(self.start_date.month)
+        start_month, end_month = quarter_to_month(quarter)
+        start = date(self.start_date.year, start_month, 1)
+        if self.quarters() == 0:
+            days = calendar.monthrange(start.year, start.month + 2)[1]
+            end = date(start.year, start.month + 2, days)
+            yield (start, end)
+        else:
+            for n in xrange(self.quarters()):
+                days = calendar.monthrange(start.year, start.month + 2)[1]
+                end = date(start.year, start.month + 2, days)
+                yield (start, end)
+                start = end + timedelta(days=1)
+
+    def get_yeardelta(self):
+        """
+        Calcualte date difference in years.
+        """
+        return int(self.end_date.year) - int(self.start_date.year)
+
+    def years(self):
+        """
+        Return date difference in years.
+        """
+        if self.end_date.year == self.start_date.year:
+            return 0
+        return self.get_yeardelta() + 1
+
+    def each_year(self):
+        """
+        Yield each year.
+        """
+        start = date(self.start_date.year, 1, 1)
+        if self.years() == 0:
+            end = date(self.start_date.year, 12, 31)
+            yield (start, end)
+        else:
+            for n in xrange(self.years()):
+                end = date(start.year, 12, 31)
+                yield (start, end)
+                start = end + timedelta(days=1)
+
+    def get_range(self):
+        """
+        Return a tuple that contains self.start_date and self.end_date
+        """
+        return (self.start_date, self.end_date)
 
 
 class DateRanger(object):
 
     """
-    A class for getting common date ranges.
-
-    >>> ranger = DateRanger()
-    >>> ranger.get_base_day_range()
-
-    >>> ranger.time_range_current_week()
-
-    >>> ranger.time_range_prev_week(2)
-
-    >>> ranger.time_range_current_month()
-
-    >>> ranger.time_range_prev_month()
-
-    >>> ranger.time_range_current_quarter()
-
-    >>> ranger.time_range_prev_quarter()
-
-    >>> ranger.time_range_current_year()
-
-    >>> ranger.time_range_prev_year()
+    A class for getting common bussiness date ranges.
     """
 
     def __init__(self, base_day=None, time_min=None, time_max=None):
