@@ -216,7 +216,7 @@ class DateRanger(object):
         """
         s = datetime.combine(start, self.time_min)
         e = datetime.combine(end, self.time_max)
-        return (s, t)
+        return (s, e)
 
     def get_base_day_range(self):
         return self.get_timerange(self.base_day, self.base_day)
