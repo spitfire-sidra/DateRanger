@@ -95,7 +95,7 @@ class TestDateRange(unittest.TestCase):
 
     def test_years2(self):
         self.set_dates(date(2009, 5, 20), date(2011, 6, 22))
-        self.assertEqual(self.obj.years(), 3)
+        self.assertEqual(self.obj.years(), 2)
 
     def test_each_year(self):
         self.set_dates(date(2009, 5, 20), date(2010, 6, 22))

@@ -174,23 +174,16 @@ class DateRange(object):
         """
         Return date difference in years.
         """
-        if self.end_date.year == self.start_date.year:
-            return 0
-        return self.get_yeardelta() + 1
+        return self.get_yeardelta()
 
     def each_year(self):
         """
         Yield each year.
         """
-        start = date(self.start_date.year, 1, 1)
-        if self.years() == 0:
-            end = date(self.start_date.year, 12, 31)
+        for n in xrange(self.start_date.year, self.end_date.year + 1):
+            start = date(n, 1, 1)
+            end = date(n, 12, 31)
             yield (start, end)
-        else:
-            for n in xrange(self.years()):
-                end = date(start.year, 12, 31)
-                yield (start, end)
-                start = end + timedelta(days=1)
 
     def get_range(self):
         """
