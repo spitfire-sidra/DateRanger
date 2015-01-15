@@ -33,6 +33,7 @@ class DateRange(object):
 
     """
     An object for operations(get difference/yield date range) of date range.
+    All methods do not include end_date.
     """
 
     def __init__(self, start_date, end_date):
@@ -53,8 +54,6 @@ class DateRange(object):
     def days(self):
         """
         Calcualte the difference in days.
-
-        This method does not include end_date.
         """
         return int(self.get_timedelta().days)
 
@@ -198,121 +197,244 @@ class DateRanger(object):
     A class for getting common bussiness date ranges.
     """
 
-    def __init__(self, base_day=None, time_min=None, time_max=None):
-        self.base_day = base_day or date.today()
-        self.time_min = time_min or time.min
-        self.time_max = time_max or time.max
-
-    def get_timerange(self, start, end):
+    def __init__(self, base_date=None):
         """
-        Get the time range between 's' and 'e'.
+        Argus:
+            base_date - the base day. Example: date(2009, 11, 1)
         """
-        s = datetime.combine(start, self.time_min)
-        e = datetime.combine(end, self.time_max)
-        return (s, e)
+        self.base_date = base_date or date.today()
 
-    def get_base_day_range(self):
-        return self.get_timerange(self.base_day, self.base_day)
+    def set_base_date(self, base_date):
+        """
+        Set base date.
 
-    def get_previous_day(self, days=1):
-        previous_day = self.base_day - timedelta(days=1)
-        return self.get_timerange(previous_day, previous_day)
+        Argus:
+            base_date - Example: date(2009, 11, 1)
+        """
+        self.base_date = base_date
 
-    def get_week_timerange(self, date):
+    def base_day(self):
+        """
+        Get the DateRange of self.base_date.
+        """
+        return DateRange(self.base_date, self.base_date + timedelta(days=1))
+
+    def prev_day(self, days=1):
+        """
+        Get the DateRange that n days before self.base_date.
+
+        Argus:
+            days - n days ago
+        """
+        prev_date = self.base_date - timedelta(days=days)
+        return DateRange(prev_date, prev_date + timedelta(days=1))
+
+    def next_day(self, days=1):
+        """
+        Get the DateRange that n days after self.base_date.
+
+        Argus:
+            days - next n days
+        """
+        next_date = self.base_date + timedelta(days=days)
+        return DateRange(next_date, next_date + timedelta(days=1))
+
+    def get_week_range(self, base_date):
         """
         Find the first/last day of the week for the given day.
         Weeks start on Sunday and end on Saturday.
-        """
-        year, week, dow = date.isocalendar()
-        if dow == 7:
-            start = date
-        else:
-            start = date - timedelta(dow)
-        end = start + timedelta(6)
-        return self.get_timerange(start, end)
 
-    def time_range_current_week(self):
+        Argus:
+            base_date - any date
         """
-        Get time range of current week.
-        """
-        return self.get_week_timerange(self.base_day)
+        start =  base_date - timedelta(days=base_date.weekday())
+        end = start + timedelta(weeks=1)
+        return (start, end)
 
-    def time_range_prev_week(self, weeks=1):
+    def base_week(self):
         """
-        Get time range of previous week.
+        Get DateRange of the week that contains self.base_date.
         """
-        f, t = self.time_range_current_week()
-        delta = timedelta(days=7*weeks)
-        return (f - delta, t - delta)
+        start, end = self.get_week_range(self.base_date)
+        return DateRange(start, end)
 
-    def time_range_month(self, year, month):
+    def prev_week(self, weeks=1):
+        """
+        Get the DateRange that n weeks before self.base_date.
+
+        Argus:
+            weeks - n week ago
+        """
+        base_start, _ = self.base_week().get_range()
+        start, end = self.get_week_range(base_start - timedelta(days=7*weeks))
+        return DateRange(start, end)
+
+    def get_month_range(self, year, month):
+        """
+        Get the first and last day of the given month in given year.
+
+        Args:
+            year
+            month
+        """
         days = calendar.monthrange(year, month)[1]
-        first_day = date(year, month, 1)
-        last_day = date(year, month, days)
-        return self.get_timerange(first_day, last_day)
+        start = date(year, month, 1)
+        end = date(year, month, days) + timedelta(days=1)
+        return (start, end)
 
-    def time_range_current_month(self):
-        return self.time_range_month(self.base_day.year, self.base_day.month)
+    def base_month(self):
+        """
+        Get the DateRange of the month that contains self.base_date
+        """
+        year, month = self.base_date.year, self.base_date.month
+        start, end = self.get_month_range(year, month)
+        return DateRange(start, end)
 
-    def time_range_prev_month(self):
-        first_day, _ = self.time_range_current_month()
-        prev_month = first_day - timedelta(days=1)
-        return self.time_range_month(prev_month.year, prev_month.month)
+    def prev_month(self, months=1):
+        """
+        Get the DateRange that n months before self.base_date.
 
-    def get_quarter_timerange(self, year, quarter):
+        Argus:
+            months - n months ago
+        """
+        base_start, _ = self.base_month().get_range()
+        for n in xrange(months):
+            end = base_start - timedelta(days=1)
+            start = date(end.year, end.month, 1)
+            base_start = start
+        return DateRange(start, end)
+
+    def next_month(self, months=1):
+        """
+        Get the DateRange that n months after self.base_date.
+
+        Argus:
+            months - next n months
+        """
+        _, base_end = self.base_month().get_range()
+        for n in xrange(months):
+            next_month = base_end + timedelta(days=1)
+            start, end = self.get_month_range(next_month.year, next_month.month)
+            base_end = end
+        return DateRange(start, end)
+
+    def get_quarter_range(self, year, quarter):
         """
         Get time range with specific year and quarter.
-        >>> get_quarter_timerange(2014, 11)
-        (datetime.datetime(2014, 11, 1, 0, 0), \
-            datetime.datetime(2014, 11, 30, 23, 59, 59, 999999))
         """
         if quarter not in (1, 2, 3, 4):
             return (None, None)
-        start_month = ((quarter - 1) * 3) + 1
-        end_month = start_month + 2
-        days_of_end_month = calendar.monthrange(year, end_month)[1]
-        first_day = date(year, start_month, 1)
-        last_day = date(year, end_month, days_of_end_month)
-        return self.get_timerange(first_day, last_day)
 
-    def time_range_current_quarter(self):
-        """
-        Get current quarter timerange.
-        """
-        quarter = (self.base_day.month // 4) + 1
-        return self.get_quarter_timerange(self.base_day.year, quarter)
+        start_month, end_month = quarter_to_month(quarter)
+        days = calendar.monthrange(year, end_month)[1]
+        start = date(year, start_month, 1)
+        end = date(year, end_month, days)
+        return start, end
 
-    def time_range_prev_quarter(self):
+    def base_quarter(self):
         """
-        Get previous quarter timerange.
+        Get the DateRange of the quarter that contains self.base_date.
         """
-        year = self.base_day.year
-        quarter = (self.base_day.month // 4) + 1
-        if quarter - 1 == 0:
+        quarter = month_to_quarter(self.base_date.month)
+        start, end = self.get_quarter_range(self.base_date.year, quarter)
+        return DateRange(start, end)
+
+    def prev_quarter(self, quarters=1):
+        """
+        Get the DateRange that n quarters before self.base_date.
+
+        Argus:
+            quarters - n quarters ago
+        """
+        base_year = self.base_date.year
+        base_quarter = month_to_quarter(self.base_date.month)
+        if base_quarter - quarters == 0:
+            yeardelta = 1
             quarter = 4
-            year = year - 1
         else:
-            quarter = quarter - 1
-        return self.get_quarter_timerange(year, quarter)
+            yeardelta = quarters // 4
+            quarterdelta = quarters % 4
+            year = base_year - yeardelta
+            quarter = base_quarter - quarterdelta
+        start, end = self.get_quarter_range(year, quarter)
+        return DateRange(start, end)
 
-    def get_year_timerange(self, year):
+    def next_quarter(self, quarters=1):
+        """
+        Get the DateRange that n quarters after self.base_date.
+
+        Argus:
+            quarters - next n quarters
+        """
+        base_year = self.base_date.year
+        base_quarter = month_to_quarter(self.base_date.month)
+        yeardelta = quarters // 4
+        quarterdelta = quarters % 4
+        if quarters < 4:
+            if (base_quarter + quarters > 4):
+                year = base_year + 1
+                quarter = base_quarter + quarters - 4
+            else:
+                year = base_year
+                quarter = base_quarter + quarters
+        else:
+            year = base_year + yeardelta
+            quarter = base_quarter + quarterdelta
+        start, end = self.get_quarter_range(year, quarter)
+        return DateRange(start, end)
+
+    def get_year_range(self, year):
         """
         Get time range of the year.
         """
-        first_day = date(year, 1, 1)
-        last_day = date(year, 12, 31)
-        return self.get_timerange(first_day, last_day)
+        start = date(year, 1, 1)
+        end = date(year, 12, 31)
+        return (start, end)
 
-    def time_range_current_year(self):
+    def base_year(self):
         """
-        Get time range of current year.
+        Get the DateRange of the year that contains self.base_date.
         """
-        year = self.base_day.year
-        return self.get_year_timerange(year)
+        base_year = self.base_date.year
+        start, end = self.get_year_range(base_year)
+        return DateRange(start, end)
 
-    def time_range_prev_year(self):
+    def prev_year(self, years=1):
         """
-        Get time range of previous year.
+        Get the DateRange that n years before self.base_date.
+
+        Argus:
+            years - n years ago
         """
-        year = self.base_day.year - 1
-        return self.get_year_timerange(year)
+        year = self.base_date.year - years
+        start, end = self.get_year_range(year)
+        return DateRange(start, end)
+
+    def next_year(self, years=1):
+        """
+        Get the DateRange that n years after self.base_date.
+
+        Argus:
+            year - next n years
+        """
+        year = self.base_date.year + years
+        start, end = self.get_year_range(year)
+        return DateRange(start, end)
+
+    def from_date(self, from_date):
+        """
+        Return the DateRange from `from_date` to self.base_date
+
+        Argus:
+            from_date - Example: date(2015, 1, 1)
+        """
+        return DateRange(from_date, self.base_date + timedelta(days=1))
+
+    def to_date(self, to_date):
+        """
+        Return the DateRange from self.base_date to `to_date`
+
+        Argus:
+            to_date - Example: date(2015, 1, 1)
+        """
+        return DateRange(self.base_date, to_date + timedelta(days=1))
