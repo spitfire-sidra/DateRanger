@@ -247,7 +247,7 @@ class DateRanger(object):
             base_date - any date
         """
         start =  base_date - timedelta(days=base_date.weekday())
-        end = start + timedelta(weeks=1)
+        end = start + timedelta(days=6)
         return (start, end)
 
     def base_week(self):
@@ -267,6 +267,18 @@ class DateRanger(object):
         base_start, _ = self.base_week().get_range()
         start, end = self.get_week_range(base_start - timedelta(days=7*weeks))
         return DateRange(start, end)
+
+    def next_week(self, weeks=1):
+        """
+        Get the DateRange that n weeks after self.base_date.
+
+        Argus:
+            weeks - next n weeks
+        """
+        base_start, _ = self.base_week().get_range()
+        start, end = self.get_week_range(base_start + timedelta(days=7*weeks))
+        return DateRange(start, end)
+
 
     def get_month_range(self, year, month):
         """
