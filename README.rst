@@ -68,4 +68,4 @@ test:
 
     python -m unittest discover
 
-This command executes all test cases under the folder `DateRanger/test/`_
+This command executes all test cases under the folder `DateRanger/test/`
