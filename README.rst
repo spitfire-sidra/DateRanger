@@ -1,33 +1,64 @@
-A class for getting common date ranges.
+What is DateRanger?
+=========================
 
-INSTALLATION
-=============
+A package for getting common date ranges.
+
+Installation
+===================
 
     pip install git+https://github.com/spitfire-sidra/DateRanger
 
 Usage
 =============
 
+
 ::
 
-    >>> ranger = DateRanger()
-    >>> ranger.get_base_day_range()
+    dr = DateRanger()
 
-    >>> ranger.time_range_current_week()
+    dr.set_base_date(date)
+    dr.get_base_day()
+    dr.base_week()
+    dr.base_month()
+    dr.base_quarter()
+    dr.base_year()
 
-    >>> ranger.time_range_prev_week(2)
+    dr.prev_week(2)
+    dr.next_week(2)
 
-    >>> ranger.time_range_current_month()
+    dr.prev_month(2)
+    dr.next_month(2)
 
-    >>> ranger.time_range_prev_month()
+    dr.prev_quarter(2)
+    dr.next_quarter(2)
 
-    >>> ranger.time_range_current_quarter()
+    dr.prev_year(2)
+    dr.next_year(2)
 
-    >>> ranger.time_range_prev_quarter()
+    dr.from_date(date)
+    dr.to_date(date)
 
-    >>> ranger.time_range_current_year()
 
-    >>> ranger.time_range_prev_year()
+DateRange
+
+::
+
+    r = DateRange(start_date, end_date)
+
+    r.days()
+    r.weeks()
+    r.months()
+    r.quarters()
+    r.years()
+
+    r.each_day()
+    r.each_week()
+    r.each_month()
+    r.each_quarter()
+    r.each_years()
+
+    r.get_range()
+    (start_date, end_date)
 
 
 Contribute
@@ -37,4 +68,4 @@ test:
 
     python -m unittest discover
 
-This command executes all test cases under the folder DateRanger/test/
+This command executes all test cases under the folder `DateRanger/test/`_
