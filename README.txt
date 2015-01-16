@@ -1,5 +1,10 @@
 A class for getting common date ranges.
 
+INSTALLATION
+=============
+
+    pip install git+https://github.com/spitfire-sidra/DateRanger
+
 Usage
 =============
 

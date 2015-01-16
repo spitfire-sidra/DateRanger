@@ -313,6 +313,7 @@ class DateRanger(object):
             end = base_start - timedelta(days=1)
             start = date(end.year, end.month, 1)
             base_start = start
+        end = end + timedelta(days=1)
         return DateRange(start, end)
 
     def next_month(self, months=1):
@@ -339,7 +340,7 @@ class DateRanger(object):
         start_month, end_month = quarter_to_month(quarter)
         days = calendar.monthrange(year, end_month)[1]
         start = date(year, start_month, 1)
-        end = date(year, end_month, days)
+        end = date(year, end_month, days) + timedelta(days=1)
         return start, end
 
     def base_quarter(self):
@@ -359,14 +360,19 @@ class DateRanger(object):
         """
         base_year = self.base_date.year
         base_quarter = month_to_quarter(self.base_date.month)
-        if base_quarter - quarters == 0:
+        if base_quarter - quarters < 0:
+            quarters = abs(base_quarter - quarters)
+            yeardelta = (quarters // 4) + 1
+            quarterdelta = quarters % 4
+            quarter = 4 - quarterdelta
+        elif base_quarter - quarters == 0:
             yeardelta = 1
             quarter = 4
         else:
-            yeardelta = quarters // 4
-            quarterdelta = quarters % 4
-            year = base_year - yeardelta
-            quarter = base_quarter - quarterdelta
+            yeardelta = 0
+            quarter = base_quarter - quarters
+
+        year = base_year - yeardelta
         start, end = self.get_quarter_range(year, quarter)
         return DateRange(start, end)
 
@@ -379,18 +385,13 @@ class DateRanger(object):
         """
         base_year = self.base_date.year
         base_quarter = month_to_quarter(self.base_date.month)
-        yeardelta = quarters // 4
-        quarterdelta = quarters % 4
-        if quarters < 4:
-            if (base_quarter + quarters > 4):
-                year = base_year + 1
-                quarter = base_quarter + quarters - 4
-            else:
-                year = base_year
-                quarter = base_quarter + quarters
-        else:
+        if (base_quarter + quarters > 4):
+            yeardelta = (base_quarter + quarters) // 4
             year = base_year + yeardelta
-            quarter = base_quarter + quarterdelta
+            quarter = (base_quarter + quarters) % 4
+        else:
+            year = base_year
+            quarter = base_quarter + quarters
         start, end = self.get_quarter_range(year, quarter)
         return DateRange(start, end)
 
@@ -399,7 +400,7 @@ class DateRanger(object):
         Get time range of the year.
         """
         start = date(year, 1, 1)
-        end = date(year, 12, 31)
+        end = date(year + 1, 1, 1)
         return (start, end)
 
     def base_year(self):
