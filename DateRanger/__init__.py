@@ -7,7 +7,7 @@ from datetime import timedelta
 from DateRanger.utils import get_quarter
 from DateRanger.utils import get_monthrange
 from DateRanger.objects import DateRange
-
+from DateRanger.exceptions import InvalidDateRange
 
 class DateRanger(object):
 
@@ -97,7 +97,6 @@ class DateRanger(object):
         base_start, _ = self.base_week().get_range()
         start, end = self.get_week_range(base_start + timedelta(days=7*weeks))
         return DateRange(start, end)
-
 
     def get_month_range(self, year, month):
         """
@@ -259,6 +258,9 @@ class DateRanger(object):
         Argus:
             from_date - Example: date(2015, 1, 1)
         """
+        if from_date > self.base_date:
+            raise InvalidDateRange()
+
         return DateRange(from_date, self.base_date + timedelta(days=1))
 
     def to_date(self, to_date):
@@ -268,4 +270,7 @@ class DateRanger(object):
         Argus:
             to_date - Example: date(2015, 1, 1)
         """
+        if to_date < self.base_date:
+            raise InvalidDateRange()
+
         return DateRange(self.base_date, to_date + timedelta(days=1))
