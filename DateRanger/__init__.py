@@ -126,12 +126,10 @@ class DateRanger(object):
         Argus:
             months - n months ago
         """
-        base_start, _ = self.base_month().get_range()
+        start, end = self.base_month().get_range()
         for n in xrange(months):
-            end = base_start - timedelta(days=1)
-            start = date(end.year, end.month, 1)
-            base_start = start
-        end = end + timedelta(days=1)
+            prev = start - timedelta(days=1)
+            start, end = self.get_month_range(prev.year, prev.month)
         return DateRange(start, end)
 
     def next_month(self, months=1):
@@ -141,11 +139,10 @@ class DateRanger(object):
         Argus:
             months - next n months
         """
-        _, base_end = self.base_month().get_range()
+        start, end = self.base_month().get_range()
         for n in xrange(months):
-            next_month = base_end + timedelta(days=1)
-            start, end = self.get_month_range(next_month.year, next_month.month)
-            base_end = end
+            start = end
+            _, end = self.get_month_range(start.year, start.month)
         return DateRange(start, end)
 
     def get_quarter_range(self, year, quarter):
