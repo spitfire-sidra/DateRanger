@@ -11,7 +11,7 @@ def get_quarter(month):
     Argus:
         month - 1 ~ 12 (Integer)
     """
-    if month not in xrange(1, 13):
+    if month not in range(1, 13):
         raise InvalidMonth()
 
     quarter = 4
@@ -28,7 +28,7 @@ def get_monthrange(quarter):
     Argus:
         quarter - 1 ~ 4 (Integer)
     """
-    if quarter not in xrange(1, 5):
+    if quarter not in range(1, 5):
         raise InvalidQuarter()
 
     monthranges = ((1, 3), (4, 6), (7, 9), (10, 12))

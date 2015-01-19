@@ -127,7 +127,7 @@ class DateRanger(object):
             months - n months ago
         """
         start, end = self.base_month().get_range()
-        for n in xrange(months):
+        for n in range(months):
             prev = start - timedelta(days=1)
             start, end = self.get_month_range(prev.year, prev.month)
         return DateRange(start, end)
@@ -140,7 +140,7 @@ class DateRanger(object):
             months - next n months
         """
         start, end = self.base_month().get_range()
-        for n in xrange(months):
+        for n in range(months):
             start = end
             _, end = self.get_month_range(start.year, start.month)
         return DateRange(start, end)

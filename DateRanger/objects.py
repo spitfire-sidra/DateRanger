@@ -44,7 +44,7 @@ class DateRange(object):
         """
         Yield each day between start_date and end_date.
         """
-        for n in xrange(self.days()):
+        for n in range(self.days()):
             yield self.start_date + timedelta(n)
 
     def get_weekdelta(self):
@@ -69,7 +69,7 @@ class DateRange(object):
         Yield each week between self.start_date and self.end_date
         """
         start = (self.start_date - timedelta(days=self.start_date.weekday()))
-        for n in xrange(self.weeks() + 1):
+        for n in range(self.weeks() + 1):
             end = start + timedelta(days=7)
             yield (start, end)
             start = end + timedelta(days=1)
@@ -102,7 +102,7 @@ class DateRange(object):
             end = date(start.year, start.month, days)
             yield (start, end)
         else:
-            for n in xrange(self.months()):
+            for n in range(self.months()):
                 days = calendar.monthrange(start.year, start.month)[1]
                 end = date(start.year, start.month, days)
                 yield (start, end)
@@ -140,7 +140,7 @@ class DateRange(object):
             end = date(start.year, start.month + 2, days)
             yield (start, end)
         else:
-            for n in xrange(self.quarters()):
+            for n in range(self.quarters()):
                 days = calendar.monthrange(start.year, start.month + 2)[1]
                 end = date(start.year, start.month + 2, days)
                 yield (start, end)
@@ -162,7 +162,7 @@ class DateRange(object):
         """
         Yield each year.
         """
-        for n in xrange(self.start_date.year, self.end_date.year + 1):
+        for n in range(self.start_date.year, self.end_date.year + 1):
             start = date(n, 1, 1)
             end = date(n, 12, 31)
             yield (start, end)
