@@ -5,15 +5,20 @@ DateRanger is a module that helps user to find date ranges.
 ## Installation
 
 Currently, DateRanger is still in development.
-DateRanger can be installed via Github and pip. 
+
+It can be installed via Github and pip. 
 
 ### Install via GitHub
 
-		pip install git+https://github.com/spitfire-sidra/DateRanger
+```bash
+pip install git+https://github.com/spitfire-sidra/DateRanger
+```
 
 ### Install via pip
 
-		pip install --pre DateRanger
+```bash
+pip install --pre DateRanger
+```
 
 ## Usage
 
@@ -23,6 +28,7 @@ DateRanger can be installed via Github and pip.
 DateRange helps you to calculate 
 number of days, weeks, quarters or years in date ranges.
 ```
+
 ## Example Code:
 
 ```python
@@ -38,20 +44,20 @@ print r.days()
 ## Other usrful functions
 
 ```python
-	 r.days()
-	 r.weeks()
-	 r.months()
-	 r.quarters()
-	 r.years()
+r.days()
+r.weeks()
+r.months()
+r.quarters()
+r.years()
 
-	 r.each_day()
-	 r.each_week()
-	 r.each_month()
-	 r.each_quarter()
-	 r.each_years()
+r.each_day()
+r.each_week()
+r.each_month()
+r.each_quarter()
+r.each_years()
 
-	 r.get_range()
-	 (start_date, end_date)
+r.get_range()
+(start_date, end_date)
 ```
 
 ### DateRanger
@@ -116,27 +122,27 @@ Date range of next month.
 ## Other usrful functions
 
 ```python
-	dr.set_base_date(date)
-	dr.get_base_day()
-	dr.base_week()
-	dr.base_month()
-	dr.base_quarter()
-	dr.base_year()
+dr.set_base_date(date)
+dr.get_base_day()
+dr.base_week()
+dr.base_month()
+dr.base_quarter()
+dr.base_year()
 
-	dr.prev_week(2)
-	dr.next_week(2)
+dr.prev_week(2)
+dr.next_week(2)
 
-	dr.prev_month(2)
-	dr.next_month(2)
+dr.prev_month(2)
+dr.next_month(2)
 
-	dr.prev_quarter(2)
-	dr.next_quarter(2)
+dr.prev_quarter(2)
+dr.next_quarter(2)
 
-	dr.prev_year(2)
-	dr.next_year(2)
+dr.prev_year(2)
+dr.next_year(2)
 
-	dr.from_date(date)
-	dr.to_date(date)
+dr.from_date(date)
+dr.to_date(date)
 ```
 
 ## Contribute
