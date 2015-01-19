@@ -6,13 +6,15 @@ A package for getting common date ranges.
 Installation
 ===================
 
+::
+
     pip install git+https://github.com/spitfire-sidra/DateRanger
 
 Usage
 =============
 
 
-::
+.. code-block:: python
 
     dr = DateRanger()
 
@@ -41,7 +43,7 @@ Usage
 
 DateRange
 
-::
+.. code-block:: python
 
     r = DateRange(start_date, end_date)
 
@@ -65,6 +67,8 @@ Contribute
 ==============
 
 test:
+
+::
 
     python -m unittest discover
 
