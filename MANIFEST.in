@@ -1,3 +1,2 @@
 include *.txt
-recursive-include docs *.txt
-include README.rst
+include README.md
