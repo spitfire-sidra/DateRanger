@@ -17,8 +17,46 @@ DateRanger can be installed via Github and pip.
 
 ## Usage
 
+## DateRange
+
+```
+DateRange helps you to calculate 
+number of days, weeks, quarters or years in date ranges.
+```
+## Example Code:
+
+```python
+from datetime import date
+from DateRanger import DateRanger
+from DateRanger.objects import DateRange
+
+r = DateRange(date(2014, 11, 1), date(2014, 12, 1)) 
+print r.months()
+print r.days()
+```
+
+## Other usrful functions
+
+```python
+	 r.days()
+	 r.weeks()
+	 r.months()
+	 r.quarters()
+	 r.years()
+
+	 r.each_day()
+	 r.each_week()
+	 r.each_month()
+	 r.each_quarter()
+	 r.each_years()
+
+	 r.get_range()
+	 (start_date, end_date)
+```
+
 ### DateRanger
 
+```
 To use this module, first we need to set the base_date.
 Base_date can be any date in the past, present and future.
 Default base_date is the present date which is TODAY (date.today()).
@@ -61,7 +99,7 @@ Date range of next week.
 next_month 
 => datetime.date(2015, 2, 1) ~ datetime.date(2015, 3, 1)
 Date range of next month.
-
+```
 
 ## Example Code:
 
@@ -99,41 +137,6 @@ Date range of next month.
 
 	dr.from_date(date)
 	dr.to_date(date)
-```
-
-## DateRange
-
-DateRange helps you to calculate number of days, weeks, quarters or years in date ranges.
-
-## Example Code:
-
-```python
-from datetime import date
-from DateRanger import DateRanger
-from DateRanger.objects import DateRange
-
-r = DateRange(date(2014, 11, 1), date(2014, 12, 1)) 
-print r.months()
-print r.days()
-```
-
-## Other usrful functions
-
-```python
-	 r.days()
-	 r.weeks()
-	 r.months()
-	 r.quarters()
-	 r.years()
-
-	 r.each_day()
-	 r.each_week()
-	 r.each_month()
-	 r.each_quarter()
-	 r.each_years()
-
-	 r.get_range()
-	 (start_date, end_date)
 ```
 
 ## Contribute
