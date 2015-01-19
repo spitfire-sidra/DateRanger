@@ -56,7 +56,7 @@ class DateRange(object):
         """
         monday1 = (self.start_date - timedelta(days=self.start_date.weekday()))
         monday2 = (self.end_date - timedelta(days=self.end_date.weekday()))
-        return (monday2 - monday1).days / 7
+        return int((monday2 - monday1).days / 7)
 
     def weeks(self):
         """
