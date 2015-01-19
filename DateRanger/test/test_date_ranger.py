@@ -43,19 +43,19 @@ class TestDateRanger(unittest.TestCase):
     def test_base_week(self):
         test_date = date(2015, 1, 1)
         self.set_date(test_date)
-        expect = (date(2014, 12, 29), date(2015, 1, 4))
+        expect = (date(2014, 12, 28), date(2015, 1, 4))
         self.assertEqual(self.obj.base_week().get_range(), expect)
 
     def test_prev_week(self):
         test_date = date(2015, 1, 1)
         self.set_date(test_date)
-        expect = (date(2014, 12, 15), date(2014, 12, 21))
+        expect = (date(2014, 12, 14), date(2014, 12, 21))
         self.assertEqual(self.obj.prev_week(2).get_range(), expect)
 
     def test_next_week(self):
         test_date = date(2014, 12, 15)
         self.set_date(test_date)
-        expect = (date(2014, 12, 29), date(2015, 1, 4))
+        expect = (date(2014, 12, 28), date(2015, 1, 4))
         self.assertEqual(self.obj.next_week(2).get_range(), expect)
 
     def test_base_month(self):
