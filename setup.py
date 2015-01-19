@@ -12,4 +12,5 @@ setup(
     packages=['DateRanger',],
     license='License.txt',
     description='Useful business date ranges'
+    description-file = README.md
 )
