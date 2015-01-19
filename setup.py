@@ -6,7 +6,7 @@ from distutils.core import setup
 setup(
     name='DateRanger',
     url='https://github.com/spitfire-sidra/DateRanger',
-    version='0.2.4.dev',
+    version='0.2.5.dev',
     author='Amo Chen',
     author_email='spitfire.sidra@gmail.com',
     packages=['DateRanger',],
