@@ -1,7 +1,8 @@
 What is DateRanger?
 ==========================
 
-[![Build Status](https://travis-ci.org/spitfire-sidra/DateRanger.svg?branch=master)](https://travis-ci.org/spitfire-sidra/DateRanger)
+.. image:: https://travis-ci.org/spitfire-sidra/DateRanger.svg?branch=0.2.7.dev
+    :target: https://travis-ci.org/spitfire-sidra/DateRanger
 
 DateRanger is a module that helps user to find date ranges.
 
