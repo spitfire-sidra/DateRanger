@@ -34,11 +34,23 @@ class TestDateRanger(unittest.TestCase):
         expect = (date(2009, 12, 31), date(2010, 1, 1))
         self.assertEqual(self.obj.prev_day(2).get_range(), expect)
 
+    def test_prev_0day(self):
+        test_date = date(2010, 1, 2)
+        self.set_date(test_date)
+        expect = (date(2010, 1, 2), date(2010, 1, 3))
+        self.assertEqual(self.obj.prev_day(0).get_range(), expect)
+
     def text_next_day(self):
         test_date = date(2010, 12, 30)
         self.set_date(test_date)
         expect = (date(2011, 1, 1), date(2011, 1, 2))
         self.assertEqual(self.obj.next_day(2).get_range(), expect)
+
+    def test_next_0day(self):
+        test_date = date(2010, 1, 2)
+        self.set_date(test_date)
+        expect = (date(2010, 1, 2), date(2010, 1, 3))
+        self.assertEqual(self.obj.next_day(0).get_range(), expect)
 
     def test_base_week(self):
         test_date = date(2015, 1, 1)
@@ -52,11 +64,23 @@ class TestDateRanger(unittest.TestCase):
         expect = (date(2014, 12, 14), date(2014, 12, 21))
         self.assertEqual(self.obj.prev_week(2).get_range(), expect)
 
+    def test_prev_0week(self):
+        test_date = date(2015, 1, 1)
+        self.set_date(test_date)
+        expect = (date(2014, 12, 28), date(2015, 1, 4))
+        self.assertEqual(self.obj.prev_week(0).get_range(), expect)
+
     def test_next_week(self):
         test_date = date(2014, 12, 15)
         self.set_date(test_date)
         expect = (date(2014, 12, 28), date(2015, 1, 4))
         self.assertEqual(self.obj.next_week(2).get_range(), expect)
+
+    def test_next_0week(self):
+        test_date = date(2014, 12, 15)
+        self.set_date(test_date)
+        expect = (date(2014, 12, 14), date(2014, 12, 21))
+        self.assertEqual(self.obj.next_week(0).get_range(), expect)
 
     def test_base_month(self):
         test_date = date(2015, 1, 16)
@@ -70,11 +94,23 @@ class TestDateRanger(unittest.TestCase):
         expect = (date(2014, 11, 1), date(2014, 12, 1))
         self.assertEqual(self.obj.prev_month(2).get_range(), expect)
 
+    def test_prev_0month(self):
+        test_date = date(2015, 1, 16)
+        self.set_date(test_date)
+        expect = (date(2015, 1, 1), date(2015, 2, 1))
+        self.assertEqual(self.obj.prev_month(0).get_range(), expect)
+
     def test_next_month(self):
         test_date = date(2014, 11, 16)
         self.set_date(test_date)
         expect = (date(2015, 1, 1), date(2015, 2, 1))
         self.assertEqual(self.obj.next_month(2).get_range(), expect)
+
+    def test_next_0month(self):
+        test_date = date(2014, 11, 16)
+        self.set_date(test_date)
+        expect = (date(2014, 11, 1), date(2014, 12, 1))
+        self.assertEqual(self.obj.next_month(0).get_range(), expect)
 
     def test_base_quarter(self):
         test_date = date(2015, 1, 16)
@@ -100,11 +136,23 @@ class TestDateRanger(unittest.TestCase):
         expect = (date(2013, 7, 1), date(2013, 10, 1))
         self.assertEqual(self.obj.prev_quarter(6).get_range(), expect)
 
+    def test_prev_0quarter(self):
+        test_date = date(2015, 1, 16)
+        self.set_date(test_date)
+        expect = (date(2015, 1, 1), date(2015, 4, 1))
+        self.assertEqual(self.obj.prev_quarter(0).get_range(), expect)
+
     def test_next_quarter1(self):
         test_date = date(2013, 7, 16)
         self.set_date(test_date)
         expect = (date(2015, 1, 1), date(2015, 4, 1))
         self.assertEqual(self.obj.next_quarter(6).get_range(), expect)
+
+    def test_next_0quarter(self):
+        test_date = date(2013, 7, 16)
+        self.set_date(test_date)
+        expect = (date(2013, 7, 1), date(2013, 10, 1))
+        self.assertEqual(self.obj.next_quarter(0).get_range(), expect)
 
     def test_base_year(self):
         test_date = date(2013, 7, 16)
@@ -118,8 +166,20 @@ class TestDateRanger(unittest.TestCase):
         expect = (date(2013, 1, 1), date(2014, 1, 1))
         self.assertEqual(self.obj.prev_year(2).get_range(), expect)
 
+    def test_prev_0year(self):
+        test_date = date(2015, 7, 16)
+        self.set_date(test_date)
+        expect = (date(2015, 1, 1), date(2016, 1, 1))
+        self.assertEqual(self.obj.prev_year(0).get_range(), expect)
+
     def test_next_year(self):
         test_date = date(2015, 7, 16)
         self.set_date(test_date)
         expect = (date(2017, 1, 1), date(2018, 1, 1))
         self.assertEqual(self.obj.next_year(2).get_range(), expect)
+
+    def test_next_0year(self):
+        test_date = date(2015, 7, 16)
+        self.set_date(test_date)
+        expect = (date(2015, 1, 1), date(2016, 1, 1))
+        self.assertEqual(self.obj.next_year(0).get_range(), expect)
