@@ -2,7 +2,13 @@ What is DateRanger?
 ==========================
 
 .. image:: https://travis-ci.org/spitfire-sidra/DateRanger.svg?branch=0.2.7.dev
-    :target: https://travis-ci.org/spitfire-sidra/DateRanger
+   :target: https://travis-ci.org/spitfire-sidra/DateRanger
+
+.. image:: https://pypip.in/v/DateRanger/badge.png
+   :target: https://pypi.python.org/pypi/DateRanger
+
+.. image:: https://pypip.in/d/DateRanger/badge.png
+   :target: https://pypi.python.org/pypi/DateRanger
 
 DateRanger is a module that helps user to find date ranges.
 
