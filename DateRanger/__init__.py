@@ -30,25 +30,31 @@ class DateRanger(object):
 
         Argus:
             base_date - Example: date(2009, 11, 1)
+
+        Note:
+            self.b____, 'b' means 'base'
         """
-        self.base_date = base_date or date.today()
+        self.bdate = base_date or date.today()
+        self.bmonth = self.bdate.month
+        self.byear = self.bdate.year
+        self.bquarter = get_quarter(self.bmonth)
 
     def base_day(self):
         """
-        Get the DateRange of self.base_date.
+        Get the DateRange of self.bdate.
         """
-        return DateRange(self.base_date, self.base_date + timedelta(days=1))
+        return DateRange(self.bdate, self.bdate + timedelta(days=1))
 
     def relative_day(self, days=0):
         """
-        Calcuate a relative date from self.base_date.
+        Calcuate a relative date from self.bdate.
         """
-        rday = self.base_date + timedelta(days=days)
+        rday = self.bdate + timedelta(days=days)
         return (rday, rday + timedelta(days=1))
 
     def prev_day(self, days=1):
         """
-        Get the DateRange that n days before self.base_date.
+        Get the DateRange that n days before self.bdate.
 
         Argus:
             days - n days ago
@@ -59,7 +65,7 @@ class DateRanger(object):
 
     def next_day(self, days=1):
         """
-        Get the DateRange that n days after self.base_date.
+        Get the DateRange that n days after self.bdate.
 
         Argus:
             days - next n days
@@ -82,14 +88,14 @@ class DateRanger(object):
 
     def base_week(self):
         """
-        Get DateRange of the week that contains self.base_date.
+        Get DateRange of the week that contains self.bdate.
         """
-        start, end = self.get_week_range(self.base_date)
+        start, end = self.get_week_range(self.bdate)
         return DateRange(start, end)
 
     def relative_week(self, weeks=0):
         """
-        Calcuate a relative week range from self.base_date.
+        Calcuate a relative week range from self.bdate.
         """
         _, end_date = self.base_week().get_range()
         start, end = self.get_week_range(end_date + timedelta(days=7*weeks))
@@ -97,7 +103,7 @@ class DateRanger(object):
 
     def prev_week(self, weeks=1):
         """
-        Get the DateRange that n weeks before self.base_date.
+        Get the DateRange that n weeks before self.bdate.
 
         Argus:
             weeks - n week ago
@@ -108,7 +114,7 @@ class DateRanger(object):
 
     def next_week(self, weeks=1):
         """
-        Get the DateRange that n weeks after self.base_date.
+        Get the DateRange that n weeks after self.bdate.
 
         Argus:
             weeks - next n weeks
@@ -131,10 +137,9 @@ class DateRanger(object):
 
     def relative_month(self, months=0):
         """
-        Calcuate a relative month range from self.base_date.
+        Calcuate a relative month range from self.bdate.
         """
-        base_year = self.base_date.year
-        month_sum = self.base_date.month + months
+        month_sum = self.bmonth + months
         if month_sum < 0:
             back_months = abs(month_sum)
             yeardelta = ((back_months // 12) + 1) * -1
@@ -148,21 +153,21 @@ class DateRanger(object):
         else:
             yeardelta = month_sum // 12
             month = month_sum % 12
-        year = base_year + yeardelta
+        year = self.byear + yeardelta
         start, end = self.get_month_range(year, month)
         return (start, end)
 
     def base_month(self):
         """
-        Get the DateRange of the month that contains self.base_date
+        Get the DateRange of the month that contains self.bdate
         """
-        year, month = self.base_date.year, self.base_date.month
+        year, month = self.byear, self.bmonth
         start, end = self.get_month_range(year, month)
         return DateRange(start, end)
 
     def prev_month(self, months=1):
         """
-        Get the DateRange that n months before self.base_date.
+        Get the DateRange that n months before self.bdate.
 
         Argus:
             months - n months ago
@@ -173,7 +178,7 @@ class DateRanger(object):
 
     def next_month(self, months=1):
         """
-        Get the DateRange that n months after self.base_date.
+        Get the DateRange that n months after self.bdate.
 
         Argus:
             months - next n months
@@ -196,11 +201,9 @@ class DateRanger(object):
 
     def relative_quarter(self, quarters=0):
         """
-        Calcuate a relative quarters range from self.base_date.
+        Calcuate a relative quarters range from self.bdate.
         """
-        base_year = self.base_date.year
-        base_quarter = get_quarter(self.base_date.month)
-        quarter_sum = base_quarter + quarters
+        quarter_sum = self.bquarter + quarters
         if quarter_sum < 0:
             back_quarters = abs(quarter_sum)
             yeardelta = ((back_quarters // 4) + 1) * -1
@@ -214,21 +217,21 @@ class DateRanger(object):
         else:
             yeardelta = quarter_sum // 4
             quarter = quarter_sum % 4
-        year = base_year + yeardelta
+        year = self.byear + yeardelta
         start, end = self.get_quarter_range(year, quarter)
         return (start, end)
 
     def base_quarter(self):
         """
-        Get the DateRange of the quarter that contains self.base_date.
+        Get the DateRange of the quarter that contains self.bdate.
         """
-        quarter = get_quarter(self.base_date.month)
-        start, end = self.get_quarter_range(self.base_date.year, quarter)
+        quarter = get_quarter(self.bmonth)
+        start, end = self.get_quarter_range(self.byear, quarter)
         return DateRange(start, end)
 
     def prev_quarter(self, quarters=1):
         """
-        Get the DateRange that n quarters before self.base_date.
+        Get the DateRange that n quarters before self.bdate.
 
         Argus:
             quarters - n quarters ago
@@ -239,7 +242,7 @@ class DateRanger(object):
 
     def next_quarter(self, quarters=1):
         """
-        Get the DateRange that n quarters after self.base_date.
+        Get the DateRange that n quarters after self.bdate.
 
         Argus:
             quarters - next n quarters
@@ -256,21 +259,20 @@ class DateRanger(object):
         return (start, end)
 
     def relative_year(self, years=0):
-        year = self.base_date.year + years
+        year = self.byear + years
         start, end = self.get_year_range(year)
         return (start, end)
 
     def base_year(self):
         """
-        Get the DateRange of the year that contains self.base_date.
+        Get the DateRange of the year that contains self.bdate.
         """
-        base_year = self.base_date.year
-        start, end = self.get_year_range(base_year)
+        start, end = self.get_year_range(self.byear)
         return DateRange(start, end)
 
     def prev_year(self, years=1):
         """
-        Get the DateRange that n years before self.base_date.
+        Get the DateRange that n years before self.bdate.
 
         Argus:
             years - n years ago
@@ -281,7 +283,7 @@ class DateRanger(object):
 
     def next_year(self, years=1):
         """
-        Get the DateRange that n years after self.base_date.
+        Get the DateRange that n years after self.bdate.
 
         Argus:
             year - next n years
@@ -291,24 +293,24 @@ class DateRanger(object):
 
     def from_date(self, from_date):
         """
-        Return the DateRange from `from_date` to self.base_date
+        Return the DateRange from `from_date` to self.bdate
 
         Argus:
             from_date - Example: date(2015, 1, 1)
         """
-        if from_date > self.base_date:
+        if from_date > self.bdate:
             raise InvalidDateRange()
 
-        return DateRange(from_date, self.base_date + timedelta(days=1))
+        return DateRange(from_date, self.bdate + timedelta(days=1))
 
     def to_date(self, to_date):
         """
-        Return the DateRange from self.base_date to `to_date`
+        Return the DateRange from self.bdate to `to_date`
 
         Argus:
             to_date - Example: date(2015, 1, 1)
         """
-        if to_date < self.base_date:
+        if to_date < self.bdate:
             raise InvalidDateRange()
 
-        return DateRange(self.base_date, to_date + timedelta(days=1))
+        return DateRange(self.bdate, to_date + timedelta(days=1))
