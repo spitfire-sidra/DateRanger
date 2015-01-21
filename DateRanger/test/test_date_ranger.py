@@ -20,7 +20,7 @@ class TestDateRanger(unittest.TestCase):
         test_date = date(2009, 12, 1)
         obj = DateRanger()
         obj.set_base_date(test_date)
-        self.assertEqual(obj.base_date, test_date)
+        self.assertEqual(obj.bdate, test_date)
 
     def test_base_day(self):
         test_date = date(2009, 12, 1)

@@ -36,10 +36,10 @@ Install via pip
 Usage
 ==========================
 
-DateRange
+DateFrame
 ---------
 
-DateRange helps you to calculate number of days, weeks, quarters or years in date ranges.
+DateFrame helps you to calculate number of days, weeks, quarters or years in date ranges.
 
 -----------------
 Example Code:
@@ -49,9 +49,9 @@ Example Code:
 
     from datetime import date
     from DateRanger import DateRanger
-    from DateRanger.objects import DateRange
+    from DateRanger.objects import DateFrame
 
-    r = DateRange(date(2014, 11, 1), date(2014, 12, 1))
+    r = DateFrame(date(2014, 11, 1), date(2014, 12, 1))
     print r.months()
     print r.days()
 
@@ -130,7 +130,7 @@ Example Code:
 
         from datetime import date
         from DateRanger import DateRanger
-        from DateRanger.objects import DateRange
+        from DateRanger.objects import DateFrame
 
         dr = DateRanger()
         test_range = dr.prev_month(2)

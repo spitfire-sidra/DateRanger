@@ -9,7 +9,7 @@ from DateRanger.utils import get_monthrange
 from DateRanger.exceptions import InvalidDateRange
 
 
-class DateRange(object):
+class DateFrame(object):
 
     """
     An object for operations(get difference/yield date range) of date range.
