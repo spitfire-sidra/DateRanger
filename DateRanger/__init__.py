@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from DateRanger.utils import get_quarter
 from DateRanger.utils import get_monthrange
-from DateRanger.objects import DateRange
+from DateRanger.objects import DateFrame
 from DateRanger.exceptions import InvalidDateRange
 from DateRanger.exceptions import InvalidQuarter
 
@@ -43,7 +43,7 @@ class DateRanger(object):
         """
         Get the DateRange of self.bdate.
         """
-        return DateRange(self.bdate, self.bdate + timedelta(days=1))
+        return DateFrame(self.bdate, self.bdate + timedelta(days=1))
 
     def relative_day(self, days=0):
         """
@@ -61,7 +61,7 @@ class DateRanger(object):
         """
         ndays = days * -1
         start, end = self.relative_day(days=ndays)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def next_day(self, days=1):
         """
@@ -71,7 +71,7 @@ class DateRanger(object):
             days - next n days
         """
         start, end = self.relative_day(days=days)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def get_week_range(self, base_date):
         """
@@ -91,7 +91,7 @@ class DateRanger(object):
         Get DateRange of the week that contains self.bdate.
         """
         start, end = self.get_week_range(self.bdate)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def relative_week(self, weeks=0):
         """
@@ -110,7 +110,7 @@ class DateRanger(object):
         """
         nweeks = weeks * -1
         start, end = self.relative_week(weeks=nweeks)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def next_week(self, weeks=1):
         """
@@ -120,7 +120,7 @@ class DateRanger(object):
             weeks - next n weeks
         """
         start, end = self.relative_week(weeks=weeks)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def get_month_range(self, year, month):
         """
@@ -163,7 +163,7 @@ class DateRanger(object):
         """
         year, month = self.byear, self.bmonth
         start, end = self.get_month_range(year, month)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def prev_month(self, months=1):
         """
@@ -174,7 +174,7 @@ class DateRanger(object):
         """
         nmonths = months * -1
         start, end = self.relative_month(months=nmonths)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def next_month(self, months=1):
         """
@@ -184,7 +184,7 @@ class DateRanger(object):
             months - next n months
         """
         start, end = self.relative_month(months=months)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def get_quarter_range(self, year, quarter):
         """
@@ -227,7 +227,7 @@ class DateRanger(object):
         """
         quarter = get_quarter(self.bmonth)
         start, end = self.get_quarter_range(self.byear, quarter)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def prev_quarter(self, quarters=1):
         """
@@ -238,7 +238,7 @@ class DateRanger(object):
         """
         nquarters = quarters * -1
         start, end = self.relative_quarter(quarters=nquarters)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def next_quarter(self, quarters=1):
         """
@@ -248,7 +248,7 @@ class DateRanger(object):
             quarters - next n quarters
         """
         start, end = self.relative_quarter(quarters=quarters)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def get_year_range(self, year):
         """
@@ -268,7 +268,7 @@ class DateRanger(object):
         Get the DateRange of the year that contains self.bdate.
         """
         start, end = self.get_year_range(self.byear)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def prev_year(self, years=1):
         """
@@ -279,7 +279,7 @@ class DateRanger(object):
         """
         nyears = years * -1
         start, end = self.relative_year(years=nyears)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def next_year(self, years=1):
         """
@@ -289,7 +289,7 @@ class DateRanger(object):
             year - next n years
         """
         start, end = self.relative_year(years=years)
-        return DateRange(start, end)
+        return DateFrame(start, end)
 
     def from_date(self, from_date):
         """
@@ -301,7 +301,7 @@ class DateRanger(object):
         if from_date > self.bdate:
             raise InvalidDateRange()
 
-        return DateRange(from_date, self.bdate + timedelta(days=1))
+        return DateFrame(from_date, self.bdate + timedelta(days=1))
 
     def to_date(self, to_date):
         """
@@ -313,4 +313,4 @@ class DateRanger(object):
         if to_date < self.bdate:
             raise InvalidDateRange()
 
-        return DateRange(self.bdate, to_date + timedelta(days=1))
+        return DateFrame(self.bdate, to_date + timedelta(days=1))

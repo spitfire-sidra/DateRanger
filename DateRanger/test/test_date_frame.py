@@ -3,19 +3,19 @@
 import unittest
 from datetime import date
 
-from DateRanger import DateRange
+from DateRanger import DateFrame
 
 
-class TestDateRange(unittest.TestCase):
+class TestDateFrame(unittest.TestCase):
 
     """
-    Test cases for DateRange
+    Test cases for DateFrame
     """
 
     def set_dates(self, start_date, end_date):
         self.start_date = start_date
         self.end_date = end_date
-        self.obj = DateRange(start_date, end_date)
+        self.obj = DateFrame(start_date, end_date)
 
     def test_days(self):
         self.set_dates(date(2009, 5, 20), date(2009, 5, 22))
