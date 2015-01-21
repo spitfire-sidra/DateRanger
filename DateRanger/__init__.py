@@ -9,6 +9,7 @@ from DateRanger.utils import get_monthrange
 from DateRanger.objects import DateRange
 from DateRanger.exceptions import InvalidDateRange
 
+
 class DateRanger(object):
 
     """
@@ -20,22 +21,29 @@ class DateRanger(object):
         Argus:
             base_date - the base day. Example: date(2009, 11, 1)
         """
-        self.base_date = base_date or date.today()
+        self.set_base_date(base_date)
 
-    def set_base_date(self, base_date):
+    def set_base_date(self, base_date=None):
         """
         Set base date.
 
         Argus:
             base_date - Example: date(2009, 11, 1)
         """
-        self.base_date = base_date
+        self.base_date = base_date or date.today()
 
     def base_day(self):
         """
         Get the DateRange of self.base_date.
         """
         return DateRange(self.base_date, self.base_date + timedelta(days=1))
+
+    def relative_day(self, days=0):
+        """
+        Calcuate a relative date from self.base_date.
+        """
+        rday = self.base_date + timedelta(days=days)
+        return (rday, rday + timedelta(days=1))
 
     def prev_day(self, days=1):
         """
@@ -44,8 +52,9 @@ class DateRanger(object):
         Argus:
             days - n days ago
         """
-        prev_date = self.base_date - timedelta(days=days)
-        return DateRange(prev_date, prev_date + timedelta(days=1))
+        ndays = days * -1
+        start, end = self.relative_day(days=ndays)
+        return DateRange(start, end)
 
     def next_day(self, days=1):
         """
@@ -54,13 +63,14 @@ class DateRanger(object):
         Argus:
             days - next n days
         """
-        next_date = self.base_date + timedelta(days=days)
-        return DateRange(next_date, next_date + timedelta(days=1))
+        start, end = self.relative_day(days=days)
+        return DateRange(start, end)
 
     def get_week_range(self, base_date):
         """
         Find the first/last day of the week for the given day.
-        Weeks start on Sunday and end on Saturday.
+        Weeks start on Sunday and end on Sunday.
+        Because we don't include the last day.
 
         Argus:
             base_date - any date
@@ -126,10 +136,21 @@ class DateRanger(object):
         Argus:
             months - n months ago
         """
-        start, end = self.base_month().get_range()
-        for n in range(months):
-            prev = start - timedelta(days=1)
-            start, end = self.get_month_range(prev.year, prev.month)
+        base_year = self.base_date.year
+        if self.base_date.month - months < 0:
+            months = abs(self.base_date.month - months)
+            yeardelta = (months // 12) + 1
+            monthdelta = months % 12
+            month = 12 - monthdelta
+        elif self.base_date.month - months == 0:
+            yeardelta = 1
+            month = 12
+        else:
+            yeardelta = 0
+            month = self.base_date.month - months
+
+        year = base_year - yeardelta
+        start, end = self.get_month_range(year, month)
         return DateRange(start, end)
 
     def next_month(self, months=1):
@@ -139,10 +160,15 @@ class DateRanger(object):
         Argus:
             months - next n months
         """
-        start, end = self.base_month().get_range()
-        for n in range(months):
-            start = end
-            _, end = self.get_month_range(start.year, start.month)
+        base_year = self.base_date.year
+        if (self.base_date.month + months > 12):
+            yeardelta = (self.base_date.month + months) // 12
+            year = base_year + yeardelta
+            month = (self.base_date.month + months) % 12
+        else:
+            year = base_year
+            month = self.base_date.month + months
+        start, end = self.get_month_range(year, month)
         return DateRange(start, end)
 
     def get_quarter_range(self, year, quarter):
