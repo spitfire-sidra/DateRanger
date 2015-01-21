@@ -118,62 +118,56 @@ For example:
 
 If base_date is datetime.date(2015, 1, 19), then the relative date ranges would be:
 
-::
+.. code::
+
     base_week
     => datetime.date(2015, 1, 18) ~ datetime.date(2015, 1, 25)
     The week that contains base_date.
 
+.. code::
 
-
-::
     base_month
     => datetime.date(2015, 1, 1) ~ datetime.date(2015, 2, 1)
     The month that contains base_date.
 
+.. code::
 
-
-::
     base_quarter
     => datetime.date(2015, 1, 1) ~ datetime.date(2015, 4, 1)
     The quarter that contains base_date.
 
+.. code::
 
-
-::    
     base_year
     => datetime.date(2015, 1, 1) ~ datetime.date(2016, 1, 1)
     The year that contains base_date.
 
+.. code::
 
-
-::
     prev_week
     => datetime.date(2015, 1, 11) ~ datetime.date(2015, 1, 18)
     Date range of previous week.
 
+.. code::
 
-
-::
     prev_month
     => datetime.date(2014, 12, 1) ~ datetime.date(2015, 1, 1)
     Date range of previous month.
 
+.. code::
 
-
-::
     next_week
     => datetime.date(2015, 1, 25) ~ datetime.date(2015, 2,1)
     Date range of next week.
 
+.. code::
 
-
-::    
     next_month
     => datetime.date(2015, 2, 1) ~ datetime.date(2015, 3, 1)
     Date range of next month.
 
 
-    
+
 ------------------
 Example code:
 ------------------
