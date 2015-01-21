@@ -68,7 +68,7 @@ class DateFrame(object):
         """
         Yield each week between self.start_date and self.end_date
         """
-        start = (self.start_date - timedelta(days=self.start_date.weekday()))
+        start = (self.start_date - timedelta(days=self.start_date.weekday()+1))
         for n in range(self.weeks() + 1):
             end = start + timedelta(days=7)
             yield (start, end)
