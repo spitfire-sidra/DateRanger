@@ -1,7 +1,7 @@
 What is DateRanger?
 ==========================
 
-.. image:: https://travis-ci.org/spitfire-sidra/DateRanger.svg?branch=0.2.7.dev
+.. image:: https://travis-ci.org/spitfire-sidra/DateRanger.svg
    :target: https://travis-ci.org/spitfire-sidra/DateRanger
 
 .. image:: https://pypip.in/v/DateRanger/badge.png
