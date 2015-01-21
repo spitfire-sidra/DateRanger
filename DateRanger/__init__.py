@@ -86,6 +86,14 @@ class DateRanger(object):
         start, end = self.get_week_range(self.base_date)
         return DateRange(start, end)
 
+    def relative_week(self, weeks=0):
+        """
+        Calcuate a relative week range from self.base_date.
+        """
+        _, end_date = self.base_week().get_range()
+        start, end = self.get_week_range(end_date + timedelta(days=7*weeks))
+        return (start, end)
+
     def prev_week(self, weeks=1):
         """
         Get the DateRange that n weeks before self.base_date.
@@ -93,8 +101,8 @@ class DateRanger(object):
         Argus:
             weeks - n week ago
         """
-        _, end_date = self.base_week().get_range()
-        start, end = self.get_week_range(end_date - timedelta(days=7*weeks))
+        nweeks = weeks * -1
+        start, end = self.relative_week(weeks=nweeks)
         return DateRange(start, end)
 
     def next_week(self, weeks=1):
@@ -104,8 +112,7 @@ class DateRanger(object):
         Argus:
             weeks - next n weeks
         """
-        _, end_date = self.base_week().get_range()
-        start, end = self.get_week_range(end_date + timedelta(days=7*weeks))
+        start, end = self.relative_week(weeks=weeks)
         return DateRange(start, end)
 
     def get_month_range(self, year, month):
@@ -119,6 +126,29 @@ class DateRanger(object):
         days = calendar.monthrange(year, month)[1]
         start = date(year, month, 1)
         end = date(year, month, days) + timedelta(days=1)
+        return (start, end)
+
+    def relative_month(self, months=0):
+        """
+        Calcuate a relative month range from self.base_date.
+        """
+        base_year = self.base_date.year
+        month_sum = self.base_date.month + months
+        if month_sum < 0:
+            back_months = abs(month_sum)
+            yeardelta = ((back_months // 12) + 1) * -1
+            month = 12 - (back_months % 12)
+        elif month_sum == 0:
+            yeardelta = -1
+            month = 12
+        elif month_sum <= 12:
+            yeardelta = 0
+            month = month_sum
+        else:
+            yeardelta = month_sum // 12
+            month = month_sum % 12
+        year = base_year + yeardelta
+        start, end = self.get_month_range(year, month)
         return (start, end)
 
     def base_month(self):
@@ -136,21 +166,8 @@ class DateRanger(object):
         Argus:
             months - n months ago
         """
-        base_year = self.base_date.year
-        if self.base_date.month - months < 0:
-            months = abs(self.base_date.month - months)
-            yeardelta = (months // 12) + 1
-            monthdelta = months % 12
-            month = 12 - monthdelta
-        elif self.base_date.month - months == 0:
-            yeardelta = 1
-            month = 12
-        else:
-            yeardelta = 0
-            month = self.base_date.month - months
-
-        year = base_year - yeardelta
-        start, end = self.get_month_range(year, month)
+        nmonths = months * -1
+        start, end = self.relative_month(months=nmonths)
         return DateRange(start, end)
 
     def next_month(self, months=1):
@@ -160,15 +177,7 @@ class DateRanger(object):
         Argus:
             months - next n months
         """
-        base_year = self.base_date.year
-        if (self.base_date.month + months > 12):
-            yeardelta = (self.base_date.month + months) // 12
-            year = base_year + yeardelta
-            month = (self.base_date.month + months) % 12
-        else:
-            year = base_year
-            month = self.base_date.month + months
-        start, end = self.get_month_range(year, month)
+        start, end = self.relative_month(months=months)
         return DateRange(start, end)
 
     def get_quarter_range(self, year, quarter):
