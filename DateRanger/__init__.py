@@ -194,6 +194,30 @@ class DateRanger(object):
         end = date(year, end_month, days) + timedelta(days=1)
         return start, end
 
+    def relative_quarter(self, quarters=0):
+        """
+        Calcuate a relative quarters range from self.base_date.
+        """
+        base_year = self.base_date.year
+        base_quarter = get_quarter(self.base_date.month)
+        quarter_sum = base_quarter + quarters
+        if quarter_sum < 0:
+            back_quarters = abs(quarter_sum)
+            yeardelta = ((back_quarters // 4) + 1) * -1
+            quarter = 4 - (back_quarters % 4)
+        elif quarter_sum == 0:
+            yeardelta = -1
+            quarter = 4
+        elif quarter_sum <= 4:
+            yeardelta = 0
+            quarter = quarter_sum
+        else:
+            yeardelta = quarter_sum // 4
+            quarter = quarter_sum % 4
+        year = base_year + yeardelta
+        start, end = self.get_quarter_range(year, quarter)
+        return (start, end)
+
     def base_quarter(self):
         """
         Get the DateRange of the quarter that contains self.base_date.
@@ -209,22 +233,8 @@ class DateRanger(object):
         Argus:
             quarters - n quarters ago
         """
-        base_year = self.base_date.year
-        base_quarter = get_quarter(self.base_date.month)
-        if base_quarter - quarters < 0:
-            quarters = abs(base_quarter - quarters)
-            yeardelta = (quarters // 4) + 1
-            quarterdelta = quarters % 4
-            quarter = 4 - quarterdelta
-        elif base_quarter - quarters == 0:
-            yeardelta = 1
-            quarter = 4
-        else:
-            yeardelta = 0
-            quarter = base_quarter - quarters
-
-        year = base_year - yeardelta
-        start, end = self.get_quarter_range(year, quarter)
+        nquarters = quarters * -1
+        start, end = self.relative_quarter(quarters=nquarters)
         return DateRange(start, end)
 
     def next_quarter(self, quarters=1):
@@ -234,16 +244,7 @@ class DateRanger(object):
         Argus:
             quarters - next n quarters
         """
-        base_year = self.base_date.year
-        base_quarter = get_quarter(self.base_date.month)
-        if (base_quarter + quarters > 4):
-            yeardelta = (base_quarter + quarters) // 4
-            year = base_year + yeardelta
-            quarter = (base_quarter + quarters) % 4
-        else:
-            year = base_year
-            quarter = base_quarter + quarters
-        start, end = self.get_quarter_range(year, quarter)
+        start, end = self.relative_quarter(quarters=quarters)
         return DateRange(start, end)
 
     def get_year_range(self, year):
@@ -252,6 +253,11 @@ class DateRanger(object):
         """
         start = date(year, 1, 1)
         end = date(year + 1, 1, 1)
+        return (start, end)
+
+    def relative_year(self, years=0):
+        year = self.base_date.year + years
+        start, end = self.get_year_range(year)
         return (start, end)
 
     def base_year(self):
@@ -269,8 +275,8 @@ class DateRanger(object):
         Argus:
             years - n years ago
         """
-        year = self.base_date.year - years
-        start, end = self.get_year_range(year)
+        nyears = years * -1
+        start, end = self.relative_year(years=nyears)
         return DateRange(start, end)
 
     def next_year(self, years=1):
@@ -280,8 +286,7 @@ class DateRanger(object):
         Argus:
             year - next n years
         """
-        year = self.base_date.year + years
-        start, end = self.get_year_range(year)
+        start, end = self.relative_year(years=years)
         return DateRange(start, end)
 
     def from_date(self, from_date):
