@@ -21,11 +21,17 @@ class TestDateFrame(unittest.TestCase):
         self.set_dates(date(2009, 5, 20), date(2009, 5, 22))
         self.assertEqual(self.obj.days(), 2)
 
-    def test_each_day(self):
+    def test_each_day1(self):
         self.set_dates(date(2009, 12, 19), date(2010, 1, 21))
         result = [item for item in self.obj.each_day()]
         expect = (self.end_date - self.start_date).days
         self.assertEqual(len(result), expect)
+
+    def test_each_day2(self):
+        self.set_dates(date(2015, 1, 21), date(2015, 1, 21))
+        result = [item for item in self.obj.each_day()]
+        expect = (self.end_date - self.start_date).days
+        self.assertEqual(len(result), 1)
 
     def test_weeks1(self):
         self.set_dates(date(2015, 1, 9), date(2015, 1, 14))
@@ -34,6 +40,10 @@ class TestDateFrame(unittest.TestCase):
     def test_weeks2(self):
         self.set_dates(date(2015, 1, 9), date(2015, 1, 19))
         self.assertEqual(self.obj.weeks(), 2)
+
+    def test_weeks3(self):
+        self.set_dates(date(2015, 1, 9), date(2015, 1, 9))
+        self.assertEqual(self.obj.weeks(), 0)
 
     def test_each_week1(self):
         self.set_dates(date(2014, 12, 2), date(2015, 1, 19))
