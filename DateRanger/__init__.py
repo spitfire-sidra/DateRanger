@@ -8,6 +8,7 @@ from DateRanger.utils import get_quarter
 from DateRanger.utils import get_monthrange
 from DateRanger.objects import DateRange
 from DateRanger.exceptions import InvalidDateRange
+from DateRanger.exceptions import InvalidQuarter
 
 
 class DateRanger(object):
@@ -185,7 +186,7 @@ class DateRanger(object):
         Get time range with specific year and quarter.
         """
         if quarter not in (1, 2, 3, 4):
-            return (None, None)
+            raise InvalidQuarter()
 
         start_month, end_month = get_monthrange(quarter)
         days = calendar.monthrange(year, end_month)[1]
