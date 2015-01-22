@@ -13,6 +13,8 @@ What is DateRanger?
 .. image:: https://pypip.in/d/DateRanger/badge.png
    :target: https://pypi.python.org/pypi/DateRanger
 
+
+
 DateRanger is a module that helps user to find date ranges.
 
 Installation
