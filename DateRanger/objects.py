@@ -44,8 +44,11 @@ class DateFrame(object):
         """
         Yield each day between start_date and end_date.
         """
-        for n in range(self.days()):
-            yield self.start_date + timedelta(n)
+        if self.days() == 0:
+            yield self.start_date
+        else:
+            for n in range(self.days()+1):
+                yield self.start_date + timedelta(n)
 
     def get_weekdelta(self):
         """
@@ -56,23 +59,30 @@ class DateFrame(object):
         """
         monday1 = (self.start_date - timedelta(days=self.start_date.weekday()))
         monday2 = (self.end_date - timedelta(days=self.end_date.weekday()))
-        return int((monday2 - monday1).days / 7)
+        # if self.start_date and self.end_date in the same week.
+        if (monday2 - timedelta(days=1)) == self.start_date:
+            return timedelta(days=0)
+        else:
+            return monday2 - monday1
 
     def weeks(self):
         """
         Return date difference in months.
         """
-        return self.get_weekdelta()
+        return int(self.get_weekdelta().days / 7)
 
     def each_week(self):
         """
         Yield each week between self.start_date and self.end_date
         """
-        start = (self.start_date - timedelta(days=self.start_date.weekday()))
-        for n in range(self.weeks() + 1):
-            end = start + timedelta(days=7)
-            yield (start, end)
-            start = end + timedelta(days=1)
+        if self.weeks() == 0:
+            yield (self.end_date - timedelta(days=6), self.end_date)
+        else:
+            dow = self.start_date.weekday()
+            start = (self.start_date - timedelta(days=dow+1))
+            for n in range(self.weeks()+1):
+                yield (start, start + timedelta(days=6))
+                start = start + timedelta(days=7)
 
     def get_monthdelta(self):
         """
@@ -80,10 +90,10 @@ class DateFrame(object):
         """
         yeardelta = self.get_yeardelta()
         if yeardelta == 0:
-            return int(self.end_date.month) - int(self.start_date.month)
+            return self.end_date.month - self.start_date.month
 
-        monthdelta = (12 - int(self.start_date.month) + 1) + \
-            ((yeardelta - 1) * 12) + int(self.end_date.month)
+        monthdelta = (13 - self.start_date.month) + \
+            ((yeardelta - 1) * 12) + self.end_date.month
         return monthdelta
 
     def months(self):
@@ -99,27 +109,25 @@ class DateFrame(object):
         start = date(self.start_date.year, self.start_date.month, 1)
         if self.months() == 0:
             days = calendar.monthrange(start.year, start.month)[1]
+            yield (start, date(start.year, start.month, days))
+
+        for n in range(self.months()):
+            days = calendar.monthrange(start.year, start.month)[1]
             end = date(start.year, start.month, days)
             yield (start, end)
-        else:
-            for n in range(self.months()):
-                days = calendar.monthrange(start.year, start.month)[1]
-                end = date(start.year, start.month, days)
-                yield (start, end)
-                start = end + timedelta(days=1)
+            start = end + timedelta(days=1)
 
     def get_quarterdelta(self):
         """
         Calcualte date difference in quraters.
         """
-        start_quarter = get_quarter(self.start_date.month)
-        end_quarter = get_quarter(self.end_date.month)
+        squarter = get_quarter(self.start_date.month)
+        equarter = get_quarter(self.end_date.month)
         yeardelta = self.get_yeardelta()
         if yeardelta == 0:
-            return end_quarter - start_quarter
+            return equarter - squarter
 
-        quarterdelta = (4 - start_quarter) + \
-            ((yeardelta - 1) * 4) + end_quarter
+        quarterdelta = (4 - squarter) + ((yeardelta - 1) * 4) + equarter
         return quarterdelta
 
     def quarters(self):
@@ -139,12 +147,12 @@ class DateFrame(object):
             days = calendar.monthrange(start.year, start.month + 2)[1]
             end = date(start.year, start.month + 2, days)
             yield (start, end)
-        else:
-            for n in range(self.quarters()):
-                days = calendar.monthrange(start.year, start.month + 2)[1]
-                end = date(start.year, start.month + 2, days)
-                yield (start, end)
-                start = end + timedelta(days=1)
+
+        for n in range(self.quarters()):
+            days = calendar.monthrange(start.year, start.month + 2)[1]
+            end = date(start.year, start.month + 2, days)
+            yield (start, end)
+            start = end + timedelta(days=1)
 
     def get_yeardelta(self):
         """
@@ -163,9 +171,7 @@ class DateFrame(object):
         Yield each year.
         """
         for n in range(self.start_date.year, self.end_date.year + 1):
-            start = date(n, 1, 1)
-            end = date(n, 12, 31)
-            yield (start, end)
+            yield (date(n, 1, 1), date(n, 12, 31))
 
     def get_range(self):
         """

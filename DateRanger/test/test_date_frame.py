@@ -21,11 +21,15 @@ class TestDateFrame(unittest.TestCase):
         self.set_dates(date(2009, 5, 20), date(2009, 5, 22))
         self.assertEqual(self.obj.days(), 2)
 
-    def test_each_day(self):
+    def test_each_day1(self):
         self.set_dates(date(2009, 12, 19), date(2010, 1, 21))
         result = [item for item in self.obj.each_day()]
-        expect = (self.end_date - self.start_date).days
-        self.assertEqual(len(result), expect)
+        self.assertEqual(len(result), 34)
+
+    def test_each_day2(self):
+        self.set_dates(date(2015, 1, 21), date(2015, 1, 21))
+        result = [item for item in self.obj.each_day()]
+        self.assertEqual(len(result), 1)
 
     def test_weeks1(self):
         self.set_dates(date(2015, 1, 9), date(2015, 1, 14))
@@ -34,6 +38,10 @@ class TestDateFrame(unittest.TestCase):
     def test_weeks2(self):
         self.set_dates(date(2015, 1, 9), date(2015, 1, 19))
         self.assertEqual(self.obj.weeks(), 2)
+
+    def test_weeks3(self):
+        self.set_dates(date(2015, 1, 9), date(2015, 1, 9))
+        self.assertEqual(self.obj.weeks(), 0)
 
     def test_each_week1(self):
         self.set_dates(date(2014, 12, 2), date(2015, 1, 19))
@@ -44,6 +52,13 @@ class TestDateFrame(unittest.TestCase):
         self.set_dates(date(2014, 12, 2), date(2014, 12, 2))
         result = [item for item in self.obj.each_week()]
         self.assertEqual(len(result), 1)
+
+    def test_each_week3(self):
+        self.set_dates(date(2015, 1, 18), date(2015, 1, 24))
+        result = [item for item in self.obj.each_week()]
+        self.assertEqual(len(result), 1)
+        expect = (date(2015, 1, 18), date(2015, 1, 24))
+        self.assertIn(expect, result)
 
     def test_months1(self):
         self.set_dates(date(2009, 5, 20), date(2009, 5, 22))
@@ -66,6 +81,8 @@ class TestDateFrame(unittest.TestCase):
         self.set_dates(date(2009, 5, 20), date(2009, 5, 22))
         result = [item for item in self.obj.each_month()]
         self.assertEqual(len(result), 1)
+        expect = (date(2009, 5, 1), date(2009, 5, 31))
+        self.assertIn(expect, result)
 
     def test_quarters1(self):
         self.set_dates(date(2011, 6, 20), date(2011, 6, 22))
@@ -101,3 +118,7 @@ class TestDateFrame(unittest.TestCase):
         self.set_dates(date(2009, 5, 20), date(2010, 6, 22))
         result = [item for item in self.obj.each_year()]
         self.assertEqual(len(result), 2)
+
+
+if __name__ == '__main__':
+    unittest.main()
