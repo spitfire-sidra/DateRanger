@@ -10,6 +10,9 @@ What is DateRanger?
 .. image:: https://pypip.in/v/DateRanger/badge.png
    :target: https://pypi.python.org/pypi/DateRanger
 
+.. image:: https://pypip.in/py_versions/DateRanger/badge.svg
+   :target: https://pypi.python.org/pypi/DateRanger
+
 .. image:: https://pypip.in/d/DateRanger/badge.png
    :target: https://pypi.python.org/pypi/DateRanger
 
