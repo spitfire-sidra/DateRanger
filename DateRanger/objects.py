@@ -46,9 +46,9 @@ class DateFrame(object):
         """
         if self.days() == 0:
             yield self.start_date
-
-        for n in range(self.days()):
-            yield self.start_date + timedelta(n)
+        else:
+            for n in range(self.days()+1):
+                yield self.start_date + timedelta(n)
 
     def get_weekdelta(self):
         """
@@ -59,7 +59,11 @@ class DateFrame(object):
         """
         monday1 = (self.start_date - timedelta(days=self.start_date.weekday()))
         monday2 = (self.end_date - timedelta(days=self.end_date.weekday()))
-        return monday2 - monday1
+        # if self.start_date and self.end_date in the same week.
+        if (monday2 - timedelta(days=1)) == self.start_date:
+            return timedelta(days=0)
+        else:
+            return monday2 - monday1
 
     def weeks(self):
         """
@@ -71,10 +75,14 @@ class DateFrame(object):
         """
         Yield each week between self.start_date and self.end_date
         """
-        start = (self.start_date - timedelta(days=self.start_date.weekday()+1))
-        for n in range(self.weeks()+1):
-            yield (start, start + timedelta(days=6))
-            start = start + timedelta(days=7)
+        if self.weeks() == 0:
+            yield (self.end_date - timedelta(days=6), self.end_date)
+        else:
+            dow = self.start_date.weekday()
+            start = (self.start_date - timedelta(days=dow+1))
+            for n in range(self.weeks()+1):
+                yield (start, start + timedelta(days=6))
+                start = start + timedelta(days=7)
 
     def get_monthdelta(self):
         """

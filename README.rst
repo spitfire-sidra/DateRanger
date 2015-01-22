@@ -80,11 +80,11 @@ To yield each day, week, month, quarter or years in date ranges.
     >>> df = DateFrame(date(2014, 11, 30), date(2014, 12, 2))
     >>> days = [day for day in df.each_day()]
     >>> days
-    [datetime.date(2014, 11, 30), datetime.date(2014, 12, 1)]
+    [datetime.date(2014, 11, 30), datetime.date(2014, 12, 1), datetime.date(2014, 12, 2)]
     >>>
     >>> weeks = [week for week in df.each_week()] # 2 weeks
-    >>> weeks # two tuples in a list
-    [(datetime.date(2014, 11, 23), datetime.date(2014, 11, 30)), (datetime.date(2014, 12, 1), datetime.date(2014, 12, 8))]
+    >>> weeks # 2 tuples in a list
+    [(datetime.date(2014, 11, 23), datetime.date(2014, 11, 29)), (datetime.date(2014, 11, 30), datetime.date(2014, 12, 6))]
  
 
 
@@ -121,49 +121,49 @@ If base_date is datetime.date(2015, 1, 19), then the relative date ranges would 
 .. code::
 
     base_week
-    => datetime.date(2015, 1, 18) ~ datetime.date(2015, 1, 25)
+    => datetime.date(2015, 1, 18) ~ datetime.date(2015, 1, 24)
     The week that contains base_date.
 
 .. code::
 
     base_month
-    => datetime.date(2015, 1, 1) ~ datetime.date(2015, 2, 1)
+    => datetime.date(2015, 1, 1) ~ datetime.date(2015, 1, 31)
     The month that contains base_date.
 
 .. code::
 
     base_quarter
-    => datetime.date(2015, 1, 1) ~ datetime.date(2015, 4, 1)
+    => datetime.date(2015, 1, 1) ~ datetime.date(2015, 3, 31)
     The quarter that contains base_date.
 
 .. code::
 
     base_year
-    => datetime.date(2015, 1, 1) ~ datetime.date(2016, 1, 1)
+    => datetime.date(2015, 1, 1) ~ datetime.date(2015, 12, 31)
     The year that contains base_date.
 
 .. code::
 
     prev_week
-    => datetime.date(2015, 1, 11) ~ datetime.date(2015, 1, 18)
+    => datetime.date(2015, 1, 11) ~ datetime.date(2015, 1, 17)
     Date range of previous week.
 
 .. code::
 
     prev_month
-    => datetime.date(2014, 12, 1) ~ datetime.date(2015, 1, 1)
+    => datetime.date(2014, 12, 1) ~ datetime.date(2012, 12, 31)
     Date range of previous month.
 
 .. code::
 
     next_week
-    => datetime.date(2015, 1, 25) ~ datetime.date(2015, 2,1)
+    => datetime.date(2015, 1, 25) ~ datetime.date(2015, 1, 31)
     Date range of next week.
 
 .. code::
 
     next_month
-    => datetime.date(2015, 2, 1) ~ datetime.date(2015, 3, 1)
+    => datetime.date(2015, 2, 1) ~ datetime.date(2015, 2, 28)
     Date range of next month.
 
 
@@ -184,7 +184,7 @@ Example code:
         >>> date_frame.weeks()
         5
         >>> date_frame.get_range()
-        (datetime.date(2014, 11, 1), datetime.date(2014, 12, 1)) 
+        (datetime.date(2014, 11, 1), datetime.date(2014, 11, 30))
 
 
 

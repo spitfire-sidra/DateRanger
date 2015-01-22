@@ -43,14 +43,14 @@ class DateRanger(object):
         """
         Get the DateRange of self.bdate.
         """
-        return DateFrame(self.bdate, self.bdate + timedelta(days=1))
+        return DateFrame(self.bdate, self.bdate)
 
     def relative_day(self, days=0):
         """
         Calcuate a relative date from self.bdate.
         """
         rday = self.bdate + timedelta(days=days)
-        return (rday, rday + timedelta(days=1))
+        return (rday, rday)
 
     def prev_day(self, days=1):
         """
@@ -76,14 +76,13 @@ class DateRanger(object):
     def get_week_range(self, base_date):
         """
         Find the first/last day of the week for the given day.
-        Weeks start on Sunday and end on Sunday.
-        Because we don't include the last day.
+        Weeks start on Sunday and end on Saturday.
 
         Argus:
             base_date - any date
         """
         start =  base_date - timedelta(days=base_date.weekday()+1)
-        end = start + timedelta(days=7)
+        end = start + timedelta(days=6)
         return (start, end)
 
     def base_week(self):
@@ -132,7 +131,7 @@ class DateRanger(object):
         """
         days = calendar.monthrange(year, month)[1]
         start = date(year, month, 1)
-        end = date(year, month, days) + timedelta(days=1)
+        end = date(year, month, days)
         return (start, end)
 
     def relative_month(self, months=0):
@@ -196,7 +195,7 @@ class DateRanger(object):
         start_month, end_month = get_monthrange(quarter)
         days = calendar.monthrange(year, end_month)[1]
         start = date(year, start_month, 1)
-        end = date(year, end_month, days) + timedelta(days=1)
+        end = date(year, end_month, days)
         return start, end
 
     def relative_quarter(self, quarters=0):
@@ -255,7 +254,7 @@ class DateRanger(object):
         Get time range of the year.
         """
         start = date(year, 1, 1)
-        end = date(year + 1, 1, 1)
+        end = date(year, 12, 31)
         return (start, end)
 
     def relative_year(self, years=0):
