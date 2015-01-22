@@ -4,6 +4,9 @@ What is DateRanger?
 .. image:: https://travis-ci.org/spitfire-sidra/DateRanger.svg
    :target: https://travis-ci.org/spitfire-sidra/DateRanger
 
+.. image:: https://coveralls.io/repos/spitfire-sidra/DateRanger/badge.svg
+  :target: https://coveralls.io/r/spitfire-sidra/DateRanger
+
 .. image:: https://pypip.in/v/DateRanger/badge.png
    :target: https://pypi.python.org/pypi/DateRanger
 
